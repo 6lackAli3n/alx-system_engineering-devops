@@ -1,2 +1,6 @@
 #!/bin/bash
+<<<<<<< HEAD
 cat /etc/{passwd,hosts}
+=======
+cat /etc/passwd /etc/hosts
+>>>>>>> origin/main

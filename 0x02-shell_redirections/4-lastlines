@@ -1,2 +1,6 @@
 #!/bin/bash
+<<<<<<< HEAD
 tail /etc/passwd
+=======
+tail -n 10 /etc/passwd
+>>>>>>> origin/main
