@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
 
 regex = /School/
-#puts ARGV[0].scan(regex).join
+input = ARGV[0]
+puts "Input argument: #{input.inspect}"
+puts input.scan(regex).join
