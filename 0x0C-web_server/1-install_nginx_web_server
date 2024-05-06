@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# This script installs and configures nginx on an Ubuntu server
+
+# Update package index
+apt-get update -y
+
+# Install nginx
+apt-get install nginx -y
+
+# Start nginx if not already started
+if ! ps aux | grep -q '[n]ginx'; then
+    /usr/sbin/nginx
+fi
+
+# Check if nginx is listening on port 80
+if ! netstat -tuln | grep -q ':80'; then
+    echo "Nginx is not listening on port 80"
+    exit 1
+fi
+
+# Create a temporary index.html file with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Restart nginx
+kill -HUP $(cat /var/run/nginx.pid)
+
+exit 0
