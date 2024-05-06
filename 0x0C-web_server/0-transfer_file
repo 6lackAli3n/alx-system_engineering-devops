@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# This script transfers a file from the client to a server using SCP
+
+# Check if number of arguments is less than 4
+if [ "$#" -lt 4 ]; then
+    echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+    exit 1
+fi
+
+# Extract arguments
+FILE_PATH="$1"
+SERVER_IP="$2"
+USERNAME="$3"
+SSH_KEY="$4"
+
+# Transfer file to server
+scp -o StrictHostKeyChecking=no -i "$SSH_KEY" "$FILE_PATH" "$USERNAME@$SERVER_IP":~/ || { echo "Transfer failed"; exit 1; }
+echo "File successfully transferred to $USERNAME@$SERVER_IP:~/"
+
