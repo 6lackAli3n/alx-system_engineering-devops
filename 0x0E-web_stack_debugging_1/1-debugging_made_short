@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
-# configures a server to listening on port 80 of all servers active IPv4 IPs
+# Configure the server to listen on port 80 of all server's active IPv4 IPs
 
-sudo sed -i "s/8080/80/" /etc/nginx/sites-enabled/default
-sudo service nginx restart
-echo "" | sudo dd status=none of=/run/nginx.pid
+# Check if the Nginx configuration file exists
+if [ -f "/etc/nginx/sites-available/default" ]; then
+	# Modify the configuration file to listen on port 80
+	sudo sed -i "s/8080/80/" /etc/nginx/sites-available/default
+
+	# Restart the Nginx service
+	sudo service nginx restart
+else
+	echo "Nginx configuration file not found"
+fi
