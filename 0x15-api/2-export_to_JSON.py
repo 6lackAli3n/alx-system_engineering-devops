@@ -7,36 +7,14 @@ import sys
 
 if __name__ == '__main__':
     user_id = sys.argv[1]
-    user_url = f'https://jsonplaceholder.typicode.com/users/{user_id}'
-    todos_url = f'https://jsonplaceholder.typicode.com/todos?userId={user_id}'
+    user_url = "https://jsonplaceholder.typicode.com/"
+    todos_url = requests.get(url + "todos", params={"userId": user_id}).json()
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
 
-    # Fetch user data
-    user_response = requests.get(user_url)
-    if user_response.status_code != 200:
-        print("User not found")
-        sys.exit(1)
-
-        user_data = user_response.json()
-        user_name = user_data.get('username')
-
-        # Fetch todos
-        todos_response = requests.get(todos_url)
-        todos = todos_response.json()
-
-        # Prepare data for JSON export
-        tasks = []
-        for task in todos:
-            task_dict = {
-                    "task": task.get('title'),
-                    "completed": task.get('completed'),
-                    "username": user_name
-                    }
-            tasks.append(task_dict)
-
-            # Create JSON object
-            json_data = {user_id: tasks}
-
-            # Write to JSON file
-            json_filename = f'{user_id}.json'
-            with open(json_filename, 'w') as jsonfile:
-                json.dump(json_data, jsonfile)
+    with open("{}.json".format(user_id), "w") as jsonfile:
+        json.dump({user_id: [{
+            "task": t.get("title"),
+            "completed": t.get("completed"),
+            "username": username
+            } for t in todos]}, jsonfile)
