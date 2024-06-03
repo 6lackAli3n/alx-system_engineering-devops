@@ -5,8 +5,8 @@ import requests
 import sys
 
 if __name__ == '__main__':
-    user_id = sys.argv[1]
-    user_url = "https://jsonplaceholder.typicode.com/users/" + user
+    user = sys.argv[1]
+    url_user = "https://jsonplaceholder.typicode.com/users/" + user
     res = requests.get(url_user)
 
     user_name = res.json().get('username')
