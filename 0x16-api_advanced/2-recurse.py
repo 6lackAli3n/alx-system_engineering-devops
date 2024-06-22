@@ -27,7 +27,8 @@ def recurse(subreddit, hot_list=[], after=None):
     params = {'limit': 100, 'after': after}
 
     try:
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        response = requests.get(
+                url, headers=headers, params=params, allow_redirects=False)
         response.raise_for_status()  # Raise HTTPError for bad responses
 
         if response.status_code == 200:
