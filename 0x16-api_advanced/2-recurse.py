@@ -22,27 +22,25 @@ def recurse(subreddit, hot_list=[], after=None):
     list: The list of titles of all hot articles,
     or None if the subreddit is invalid.
     """
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-            "User-Agent": "0x16-api_advanced:project:\
-                    v1.0.0 (by /u/firdaus_cartoon_jr)"
-                    }
-    params = {
-            "after": after,
-            "count": count,
-            "limit": 100
-            }
-    response = requests.get(
-            url, headers=headers, params=params, allow_redirects=False)
-    if response.status_code == 404:
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    headers = {'User-Agent': 'custom_user_agent'}
+    params = {'limit': 100, 'after': after}
+
+    try:
+        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        if response.status_code == 200:
+            data = response.json().get('data', {})
+            posts = data.get('children', [])
+            hot_list.extend([post['data']['title'] for post in posts])
+            after = data.get('after')
+
+            if after:
+                return recurse(subreddit, hot_list, after)
+            else:
+                return hot_list
+        else:
+            return None
+    except (requests.RequestException, ValueError):
         return None
-
-    results = response.json().get("data")
-    after = results.get("after")
-    count += results.get("dist")
-    for c in results.get("children"):
-        hot_list.append(c.get("data").get("title"))
-
-        if after is not None:
-            return recurse(subreddit, hot_list, after, count)
-        return hot_list
